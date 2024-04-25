@@ -25,6 +25,7 @@ var (
 	tlsSkipVerify         bool
 	bearerFile            string
 	forceGet              bool
+	timeout               int
 )
 
 func parseFlag() {
@@ -33,6 +34,7 @@ func parseFlag() {
 	flag.BoolVar(&tlsSkipVerify, "tlsSkipVerify", false, "Skip TLS Verification")
 	flag.StringVar(&bearerFile, "bearer-file", "", "File containing bearer token for API requests")
 	flag.BoolVar(&forceGet, "force-get", false, "Force api.Client to use GET by rejecting POST requests")
+	flag.IntVar(&timeout, "timeout", 30, "Define http dial timeout, defaults to 30secs")
 	flag.Parse()
 }
 
@@ -45,10 +47,10 @@ func main() {
 	var roundTripper http.RoundTripper = &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
 		DialContext: (&net.Dialer{
-			Timeout:   30 * time.Second,
-			KeepAlive: 30 * time.Second,
+			Timeout:   timeout * time.Second,
+			KeepAlive: timeout * time.Second,
 		}).DialContext,
-		TLSHandshakeTimeout: 10 * time.Second,
+		TLSHandshakeTimeout: timeout * time.Second,
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: tlsSkipVerify,
 		},
