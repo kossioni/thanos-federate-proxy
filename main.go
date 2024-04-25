@@ -47,10 +47,10 @@ func main() {
 	var roundTripper http.RoundTripper = &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
 		DialContext: (&net.Dialer{
-			Timeout:   timeout * time.Second,
-			KeepAlive: timeout * time.Second,
+			Timeout:   time.Duration(timeout) * time.Second,
+			KeepAlive: time.Duration(timeout) * time.Second,
 		}).DialContext,
-		TLSHandshakeTimeout: timeout * time.Second,
+		TLSHandshakeTimeout: time.Duration(timeout) * time.Second,
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: tlsSkipVerify,
 		},
