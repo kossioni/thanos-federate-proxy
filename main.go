@@ -54,6 +54,8 @@ func main() {
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: tlsSkipVerify,
 		},
+		ResponseHeaderTimeout: time.Duration(timeout) * time.Second,
+                ExpectContinueTimeout: time.Duration(timeout) * time.Second,
 	}
 	// Create a new client.
 	c, err := api.NewClient(api.Config{
